@@ -1,0 +1,26 @@
+Entities\Project:
+  type: entity
+  table: project
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    name:
+      type: string(255)
+    create_date:
+      type: datetime
+    deleted:
+      type: integer(1)
+      default: null
+  oneToMany:
+    todos:
+      targetEntity: Todo
+      mappedBy: project
+  manyToOne:
+    user:
+      targetEntity: User
+      joinColumns:
+        id_user:
+          referencedColumnName: id

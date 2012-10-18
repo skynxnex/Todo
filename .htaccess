@@ -1,38 +1,33 @@
 <IfModule mod_rewrite.c>
- 
-# ciHTACCESS, by Mario "Kuroir" Ricalde
-RewriteEngine On
-RewriteBase /
+    RewriteEngine On
+    RewriteBase /todo/
 
-# Redirect index.php and default controller (you need to edit this) to "/". This is to prevent duplicated
-# Content. ( /welcome/index , index.php => /)
-RewriteRule ^(welcome(/index)?|index(\.php)?)/?$ / [L,R=301]
+    #Removes access to the system folder by users.
+    #Additionally this will allow you to create a System.php controller,
+    #previously this would not have been possible.
+    #'system' can be replaced if you have renamed your system folder.
+    RewriteCond %{REQUEST_URI} ^system.*
+    RewriteRule ^(.*)$ /index.php?/$1 [L]
+    
+    #When your application folder isn't in the system folder
+    #This snippet prevents user access to the application folder
+    #Submitted by: Fabdrol
+    #Rename 'application' to your applications folder name.
+    RewriteCond %{REQUEST_URI} ^application.*
+    RewriteRule ^(.*)$ /index.php?/$1 [L]
 
-# Remove /index/ segment on the URL.
-RewriteRule ^(.*)/index/? $1 [L,R=301]
-
-# Remove Trailing Slashes.
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)(/+)$ $1 [L,R=301]
-
-# Remove Multiple slashes in betweeen
-RewriteCond %{REQUEST_URI} ^(.*)//(.*)$
-RewriteRule . %1/%2 [R=301,L]
-
-# Add the file SUFIX (sufix can be set on config.php).
-# RewriteCond %{REQUEST_FILENAME} !-f
-# RewriteCond %{REQUEST_FILENAME} !-d
-# RewriteCond %{REQUEST_URI} !\.html
-# RewriteRule ^(.+)$ $1\.html [L,R=301]
-
-# Remove any slash before .html ( to prevent site/.html )
-# RewriteCond %{REQUEST_URI} \/+\.html$ [NC]
-# RewriteRule ^(.+)\/+\.html$ $1\.html [L,R=301]
-
-# Send everything to index.php
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php/$1 [L]
- 
+    #Checks to see if the user is attempting to access a valid file,
+    #such as an image or css document, if this isn't true it sends the
+    #request to index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?/$1 [L]
 </IfModule>
+
+<IfModule !mod_rewrite.c>
+    # If we don't have mod_rewrite installed, all 404's
+    # can be sent to index.php, and everything works as normal.
+    # Submitted by: ElliotHaughin
+
+    ErrorDocument 404 /index.php
+</IfModule>  

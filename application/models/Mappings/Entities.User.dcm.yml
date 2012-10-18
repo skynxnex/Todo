@@ -1,0 +1,29 @@
+Entities\User:
+  type: entity
+  table: user
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    name:
+      type: string(45)
+    email:
+      type: string(45)
+    password:
+      type: string(45)
+    gender:
+      type: string(45)
+    deleted:
+      type: integer(1)
+      default: null
+    last_login:
+      type: date
+  oneToMany:
+    todos:
+      targetEntity: Todo
+      mappedBy: user
+    projects:
+      targetEntity: Project
+      mappedBy: project
