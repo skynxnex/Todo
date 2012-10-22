@@ -28,6 +28,12 @@
       <div class="row">
 
         <div class="span8">
+          <?php if(isset($message)): ?>
+              <div class="alert alert-error">
+                  <button type="button" class="close" data-dismiss="alert">×</button>
+                  <?php echo $message; ?>
+              </div>
+          <?php endif; ?>
           <form class="form-horizontal" id="logIn" method='post' action='<?php echo base_url(); ?>user/login'>
             <fieldset>
               <legend>
@@ -63,7 +69,7 @@
 
             </fieldset>
           </form>
-          <a href="user/register">Registration</a>
+          <a href="<?php echo base_url(); ?>user/register">Registration</a>
         </div>
 
       </div>
